@@ -1,22 +1,14 @@
-const express = require("express");
+const express = require('express');
+
+const pageRoute = require('./routes/pageRoute');
 
 const app = express();
 
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
 
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-app.get("/", async (req, res) => {
-  res.status(200).render("index", {
-    navigation_active: "index",
-  });
-});
-
-app.get("/about", async (req, res) => {
-  res.status(200).render("about", {
-    navigation_active: "about",
-  });
-});
+app.use('/', pageRoute);
 
 const port = 3000;
 
