@@ -34,9 +34,12 @@ exports.getAllCourse = async (req, res) => {
 
 exports.getCourse = async (req, res) => {
   try {
-    const course = await Course.findById({ _id: req.params._id });
+    const course = await Course.findById({ _id: req.params.id });
 
-    res.status(200).render('course-single')
+    res.status(200).render('course', {
+      course,
+      navigation_active: 'courses',
+    });
   } catch (error) {
     res.status(400).json({
       status: 'not course',
