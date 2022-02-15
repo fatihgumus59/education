@@ -15,3 +15,32 @@ exports.createCourse = async (req, res) => {
     });
   }
 };
+
+exports.getAllCourse = async (req, res) => {
+  try {
+    const courses = await Course.find();
+
+    res.status(200).render('courses', {
+      courses,
+      navigation_active: 'courses',
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'not courses',
+      error,
+    });
+  }
+};
+
+exports.getCourse = async (req, res) => {
+  try {
+    const course = await Course.findById({ _id: req.params._id });
+
+    res.status(200).render('course-single')
+  } catch (error) {
+    res.status(400).json({
+      status: 'not course',
+      error,
+    });
+  }
+};
