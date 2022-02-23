@@ -9,3 +9,15 @@ exports.getAboutPage = async (req, res) => {
     navigation_active: "about",
   });
 };
+
+exports.getRegisterPage = async (req, res) => {
+  res.status(200).render("register", {
+    navigation_active: "register",
+  });
+};
+
+exports.getLoginPage = async (req, res) => {
+  res.status(200).render("login", {
+    navigation_active: "login",
+  });
+};
