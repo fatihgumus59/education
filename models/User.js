@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -11,9 +12,9 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  password:{
+  password: {
     type: String,
-    required:true,
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -21,7 +22,13 @@ const UserSchema = new Schema({
   },
 });
 
-
+UserSchema.pre('save', function (next) {
+  const user = this;
+  bcrypt.hash(user.password, 10, (err, hash) => { // 10 yazan yer  şifrenin zorluğunu arttırıyor.
+    user.password = hash;
+    next();
+  });
+});
 
 const User = mongoose.model('user', UserSchema);
 module.exports = User;
