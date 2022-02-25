@@ -17,22 +17,21 @@ exports.createUser = async (req, res) => {
   }
 };
 
-
-// aşağıdaki fonksiyonda async await kullanılmadı code: 'ERR_HTTP_HEADERS_SENT' hatası veriyor.
-exports.loginUser =  (req, res) => {
+// aşağıdaki fonksiyonda async await kullanılmadı code: 'ERR_HTTP_HEADERS_SENT' hatası veriyor
+exports.loginUser = (req, res) => {
   try {
     const { email, password } = req.body;
 
     User.findOne({ email }, (err, user) => {
       if (user) {
         // user varsa
-        bcrypt.compare(password, user.password, (err, same) => {// gelen şifre ile veritabanında ki şifre aynı ise
+        bcrypt.compare(password, user.password, (err, same) => {
+          // gelen şifre ile veritabanında ki şifre aynı ise
           if (same) {
             // user session
-            res.status(200).send({
-                message:'You are logged in'
-            });
-          } 
+            req.session.userID = user._id;
+            res.status(200).redirect('/');
+          }
         });
       }
     });
@@ -42,4 +41,10 @@ exports.loginUser =  (req, res) => {
       err,
     });
   }
+};
+
+exports.logoutUser = (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
 };
