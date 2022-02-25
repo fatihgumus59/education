@@ -23,8 +23,3 @@ exports.getLoginPage = async (req, res) => {
   });
 };
 
-exports.getDashboardPage = async (req, res) => {
-  res.status(200).render('dashboard', {
-    navigation_active: 'dashboard',
-  });
-};
