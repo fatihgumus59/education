@@ -20,11 +20,20 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  role: {
+    type: String,
+    enum: ['Teacher', 'Student', 'Admin'],
+    default: 'student',
+  },
 });
 
 UserSchema.pre('save', function (next) {
   const user = this;
-  bcrypt.hash(user.password, 10, (err, hash) => { // 10 yazan yer  şifrenin zorluğunu arttırıyor.
+  if (user.role == 'admin') {
+    user.role == 'student';
+  }
+  bcrypt.hash(user.password, 10, (err, hash) => {
+    // 10 yazan yer  şifrenin zorluğunu arttırıyor.
     user.password = hash;
     next();
   });
