@@ -29,9 +29,10 @@ const UserSchema = new Schema({
 
 UserSchema.pre('save', function (next) {
   const user = this;
-  if (user.role == 'admin') {
-    user.role == 'student';
+  if (user.role == 'Admin') {
+    this.role == 'Student';
   }
+
   bcrypt.hash(user.password, 10, (err, hash) => {
     // 10 yazan yer  şifrenin zorluğunu arttırıyor.
     user.password = hash;
