@@ -25,13 +25,19 @@ const UserSchema = new Schema({
     enum: ['Teacher', 'Student', 'Admin'],
     default: 'student',
   },
+  courses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'course',
+    },
+  ],
 });
 
 UserSchema.pre('save', function (next) {
   const user = this;
-  if (user.role == 'Admin') {
-    this.role == 'Student';
-  }
+
+  //her metot tetiklendiğinde şifre değişiyorde değişmesin diye
+  if (!user.isModified('password')) return next();
 
   bcrypt.hash(user.password, 10, (err, hash) => {
     // 10 yazan yer  şifrenin zorluğunu arttırıyor.
