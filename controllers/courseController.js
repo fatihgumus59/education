@@ -57,7 +57,7 @@ exports.getCourse = async (req, res) => {
     if (categorySlug) {
       filter = { category: category._id };
     }
-
+    const user = await User.findById(req.session.userID);
     const courses = await Course.find(filter).sort('-createdAt');
     const categories = await Category.find();
 
@@ -69,6 +69,7 @@ exports.getCourse = async (req, res) => {
       course,
       categories,
       courses,
+      user,
       navigation_active: 'courses',
     });
   } catch (error) {
@@ -85,6 +86,23 @@ exports.enrollCourse = async (req, res) => {
 
     // kurs id ile body'den gelen course id eşit ise ekleyecek
     await user.courses.push({ _id: req.body.course_id });
+    await user.save();
+
+    res.status(200).redirect('/users/dashboard');
+  } catch (error) {
+    res.status(400).json({
+      status: 'not enroll course',
+      error,
+    });
+  }
+};
+
+exports.releaseCourse = async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userID);
+
+    // kurs id ile body'den gelen course id eşit ise silecek
+    await user.courses.pull({ _id: req.body.course_id });
     await user.save();
 
     res.status(200).redirect('/users/dashboard');
