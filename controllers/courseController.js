@@ -49,18 +49,9 @@ exports.getAllCourse = async (req, res) => {
 
 exports.getCourse = async (req, res) => {
   try {
-    const categorySlug = req.query.categories;
-    const category = await Category.findOne({ slug: categorySlug });
 
-    let filter = {};
-
-    if (categorySlug) {
-      filter = { category: category._id };
-    }
     const user = await User.findById(req.session.userID);
-    const courses = await Course.find(filter).sort('-createdAt');
     const categories = await Category.find();
-
     const course = await Course.findOne({ slug: req.params.slug }).populate(
       'user'
     );
@@ -68,7 +59,6 @@ exports.getCourse = async (req, res) => {
     res.status(200).render('course', {
       course,
       categories,
-      courses,
       user,
       navigation_active: 'courses',
     });
