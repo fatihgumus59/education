@@ -20,7 +20,7 @@
 						</div>
 						<div class="post-content">
 
-							<% if(user && !(user.courses.includes(course._id)) ) { %>
+							<% if(!(user.role=='Teacher') && user && !(user.courses.includes(course._id)) ) { %>
 							
 								<div class="post-date">
 									<form method="POST" action="/courses/enroll">
@@ -29,7 +29,7 @@
 									</form>
 								</div>
 								
-							<% }else if(user){ %>
+							<% }else if(!(user.role=='Teacher') && user){ %>
 								<div class="post-date">
 									<form method="POST" action="/courses/release">
 										<input type="hidden" name="course_id" value="<%= course._id%>">
@@ -62,10 +62,10 @@
 				<div class="col-lg-3 col-12 right-single">
 					<div class="widget-search">
 						<div class="site-search-area">
-							<form method="get" id="site-searchform" action="#">
+							<form method="GET" id="site-searchform" action="/courses">
 								<div>
-									<input class="input-text form-control" name="search-k" id="search-k" placeholder="Search keywords..." type="text">
-									<input id="searchsubmit" value="Search" type="submit">
+								  <input class="input-text form-control" name="search" id="search-k" placeholder="Search..." type="text">
+								  <button id="searchsubmit" value="Search" type="submit"></button>
 								</div>
 							</form>
 						</div>
