@@ -16,12 +16,12 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// aşağıdaki fonksiyonda async await kullanılmadı code: 'ERR_HTTP_HEADERS_SENT' hatası veriyor
-exports.loginUser = (req, res) => {
+// aşağıdaki fonksiyonda async await direk kullanılmadı const değişkenine atıldı hata vermiyor bu şekilde
+exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    User.findOne({ email }, (err, user) => {
+    const user = User.findOne({ email }, (err, user) => {
       if (user) {
         // user varsa
         bcrypt.compare(password, user.password, (err, same) => {
@@ -49,7 +49,9 @@ exports.logoutUser = (req, res) => {
 };
 
 exports.getDashboardPage = async (req, res) => {
-  const user = await User.findOne({ _id: req.session.userID }).populate('courses')
+  const user = await User.findOne({ _id: req.session.userID }).populate(
+    'courses'
+  );
   const categories = await Category.find();
   const courses = await Course.find({ user: req.session.userID });
   res.status(200).render('dashboard', {
